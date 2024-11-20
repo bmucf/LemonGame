@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
         m_Animator.SetBool("IsWalking", isWalking); // When isWalking is true, the IsWalking parameter on the animator of this game object becomes true.
 
         // Takes current rotation of this gameobject and sets new vector to the direction of m_Movement, then rotates this game object to meet that vector at a rate of radians equal to turnSpeed per frame.
-        Vector3 desiredForward = Vector3.RotateTowards(transform.forward, m_Movement, turnSpeed * Time.deltaTime, 0f);
+        Vector3 desiredForward = Vector3.RotateTowards(transform.forward, m_Movement, turnSpeed , 0f);
         m_Rotation = Quaternion.LookRotation(desiredForward);
     }
 
