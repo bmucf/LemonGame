@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
 
     Animator m_Animator;
     Rigidbody m_Rigidbody;
+    AudioSource m_AudioSource;
     Vector3 m_Movement;
     Quaternion m_Rotation = Quaternion.identity; // Creates variable storing no rotation.
 
@@ -16,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     {
         m_Animator = GetComponent<Animator>(); // Attaches reference to animator component of this game object. This allows control of animations.
         m_Rigidbody = GetComponent<Rigidbody>(); // Attaches reference to rigidbody component of this game object. This allows control of rigidbody of this game object, which would otherwise be overridden by animations.
+        m_AudioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -31,6 +33,18 @@ public class PlayerMovement : MonoBehaviour
         bool hasVerticalInput = !Mathf.Approximately(vertical, 0f); // Checks if there is non-zero vertical input.
         bool isWalking = hasHorizontalInput || hasVerticalInput;
         m_Animator.SetBool("IsWalking", isWalking); // When isWalking is true, the IsWalking parameter on the animator of this game object becomes true.
+
+        if (isWalking)
+        {
+            if(!m_AudioSource.isPlaying)
+            {
+                m_AudioSource.Play();
+            }
+        }
+        else
+        {
+            m_AudioSource.Stop();
+        }
 
         // Takes current rotation of this gameobject and sets new vector to the direction of m_Movement, then rotates this game object to meet that vector at a rate of radians equal to turnSpeed per frame.
         Vector3 desiredForward = Vector3.RotateTowards(transform.forward, m_Movement, turnSpeed , 0f);
