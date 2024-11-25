@@ -19,6 +19,8 @@ public class GameEnding : MonoBehaviour
     float m_Timer;
     bool m_HasAudioPlayed;
 
+    public float remainingTime = 90f;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject == player)
@@ -41,6 +43,16 @@ public class GameEnding : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (remainingTime > 0)
+        {
+            remainingTime -= 1 * Time.deltaTime;
+            Debug.Log(remainingTime);
+        }
+        else
+        {
+            EndLevel(caughtBackgroundImageCanvasGroup, true, exitAudio);
+        }
+
         if (m_IsPlayerAtExit)
         {
             EndLevel(exitBackgroundImageCanvasGroup, false, exitAudio);

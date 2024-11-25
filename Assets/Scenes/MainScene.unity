@@ -4462,6 +4462,7 @@ MonoBehaviour:
   caughtBackgroundImageCanvasGroup: {fileID: 1469461113}
   exitAudio: {fileID: 1185681373}
   caughtAudio: {fileID: 1799544764}
+  remainingTime: 90
 --- !u!65 &1258529905
 BoxCollider:
   m_ObjectHideFlags: 0
