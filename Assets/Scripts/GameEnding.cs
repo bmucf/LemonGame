@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameEnding : MonoBehaviour
 {
@@ -14,10 +15,13 @@ public class GameEnding : MonoBehaviour
     public AudioSource exitAudio;
     public AudioSource caughtAudio;
 
-    bool m_IsPlayerAtExit;
+    public bool m_IsPlayerAtExit;
     bool m_IsPlayerCaught;
     float m_Timer;
     bool m_HasAudioPlayed;
+
+    public float timeRemaining = 91f;
+    public TextMeshProUGUI clockDisplay;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -32,6 +36,35 @@ public class GameEnding : MonoBehaviour
         m_IsPlayerCaught = true;
     }
 
+    public void ClockCountdown()
+    {
+        if (m_IsPlayerAtExit || m_IsPlayerCaught)
+        {
+            return;
+        }
+
+        if (timeRemaining > 70)
+        {
+            timeRemaining -= 1 * Time.deltaTime;
+            clockDisplay.text = "01:" + (int)(timeRemaining - 60);
+        }
+        else if (timeRemaining >= 60)
+        {
+            timeRemaining -= 1 * Time.deltaTime;
+            clockDisplay.text = "01:0" + (int)(timeRemaining -60);
+        }
+        else if (timeRemaining > 10)
+        {
+            timeRemaining -= 1 * Time.deltaTime;
+            clockDisplay.text = "00:" + (int)(timeRemaining);
+        }
+        else
+        {
+            timeRemaining -= 1 * Time.deltaTime;
+            clockDisplay.text = "00:0" + (int)(timeRemaining);
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -41,6 +74,13 @@ public class GameEnding : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        ClockCountdown();
+        
+        if (timeRemaining < 1)
+        {
+            EndLevel(caughtBackgroundImageCanvasGroup, true, exitAudio);
+        }
+
         if (m_IsPlayerAtExit)
         {
             EndLevel(exitBackgroundImageCanvasGroup, false, exitAudio);
