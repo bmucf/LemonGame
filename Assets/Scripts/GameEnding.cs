@@ -39,30 +39,13 @@ public class GameEnding : MonoBehaviour
     public void ClockCountdown()
     {
         if (m_IsPlayerAtExit || m_IsPlayerCaught)
-        {
             return;
-        }
 
-        if (timeRemaining > 70)
-        {
-            timeRemaining -= 1 * Time.deltaTime;
-            clockDisplay.text = "01:" + (int)(timeRemaining - 60);
-        }
-        else if (timeRemaining >= 60)
-        {
-            timeRemaining -= 1 * Time.deltaTime;
-            clockDisplay.text = "01:0" + (int)(timeRemaining -60);
-        }
-        else if (timeRemaining > 10)
-        {
-            timeRemaining -= 1 * Time.deltaTime;
-            clockDisplay.text = "00:" + (int)(timeRemaining);
-        }
-        else
-        {
-            timeRemaining -= 1 * Time.deltaTime;
-            clockDisplay.text = "00:0" + (int)(timeRemaining);
-        }
+        timeRemaining -= Time.deltaTime;
+        int minutes = Mathf.FloorToInt(timeRemaining / 60);
+        int seconds = Mathf.FloorToInt(timeRemaining % 60);
+
+        clockDisplay.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
     // Start is called before the first frame update
@@ -78,7 +61,7 @@ public class GameEnding : MonoBehaviour
         
         if (timeRemaining < 1)
         {
-            EndLevel(caughtBackgroundImageCanvasGroup, true, exitAudio);
+            EndLevel(caughtBackgroundImageCanvasGroup, true, caughtAudio);
         }
 
         if (m_IsPlayerAtExit)
