@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PlayerMovement : MonoBehaviour
 {
     public float turnSpeed = 20f;
@@ -11,6 +12,11 @@ public class PlayerMovement : MonoBehaviour
     AudioSource m_AudioSource;
     Vector3 m_Movement;
     Quaternion m_Rotation = Quaternion.identity; // Creates variable storing no rotation.
+    bool speeding = false;
+    public bool isSpeeding()
+    {
+        return speeding;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +34,12 @@ public class PlayerMovement : MonoBehaviour
 
         m_Movement.Set(horizontal, 0f, vertical); // Sets direction of movement vector.
         m_Movement.Normalize(); // Sets magnitude of movement vector to 1, including diagonal movement which would otherwise have a higher magnitude than axial movement.
+
+        if (speeding)
+        {
+            // double the speed if you're running
+            m_Movement *= 4;
+        }
 
         bool hasHorizontalInput = !Mathf.Approximately (horizontal, 0f); // Checks if there is non-zero horizontal input.
         bool hasVerticalInput = !Mathf.Approximately(vertical, 0f); // Checks if there is non-zero vertical input.
@@ -49,6 +61,21 @@ public class PlayerMovement : MonoBehaviour
         // Takes current rotation of this gameobject and sets new vector to the direction of m_Movement, then rotates this game object to meet that vector at a rate of radians equal to turnSpeed per frame.
         Vector3 desiredForward = Vector3.RotateTowards(transform.forward, m_Movement, turnSpeed , 0f);
         m_Rotation = Quaternion.LookRotation(desiredForward);
+    }
+
+    private void LateUpdate()
+    {
+        SpeedUpdate();
+    }
+    
+    // Update speed based on user input
+    void SpeedUpdate()
+    {
+        // switch speed mode when user presses G
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            speeding = !speeding; // Toggle
+        }
     }
 
     void OnAnimatorMove()
